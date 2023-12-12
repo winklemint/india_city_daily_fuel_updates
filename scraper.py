@@ -4,7 +4,9 @@ import requests
 import time
 from bs4 import BeautifulSoup
 
+
 def Petrol_price():
+    city_price={}
     try:
         response = requests.get("https://www.livemint.com/fuel-prices/petrol-city-wise")
         response.raise_for_status()  # Raise an exception for bad responses
@@ -19,11 +21,15 @@ def Petrol_price():
             info=pattern.split(fuel_info_string)
             print("-------------")
             city, petrol_price, change = info[0], info[1], info[2]
-            print(city,"-",petrol_price,"-",change)   
+            print(city,"-",petrol_price,"-",change)  
+            petrol_price=petrol_price.split("₹")[0]
+            city_price[city]= petrol_price 
     except Exception as e:
         print("Exception during request Petrol:", str(e))
+    return city_price
 
 def Diesel_price():
+    city_price={}
     try:
         response = requests.get("https://www.livemint.com/fuel-prices/diesel-city-wise")
         response.raise_for_status()  # Raise an exception for bad responses
@@ -38,12 +44,20 @@ def Diesel_price():
             info=pattern.split(fuel_info_string)
             print("-------------")
             city, diesel_price, change = info[0], info[1], info[2]
-            print(city,"-",diesel_price,"-",change)   
+            print(city,"-",diesel_price,"-",change) 
+            diesel_price=diesel_price.split("₹")[0]
+            city_price[city]= diesel_price
+
     except Exception as e:
         print("Exception during request Diesel:", str(e))
     
-
+    return city_price
 print("------petrol price----------")
-Petrol_price()
+petrol_dict=Petrol_price()
 print("--------diesel price-----------")
-Diesel_price()
+diesel_dict=Diesel_price()
+f_dict = {key: [petrol_dict.get(key, 0), diesel_dict.get(key, 0)] for key in set(petrol_dict) | set(diesel_dict)}
+
+print(f_dict)
+
+response =requests.put("http://127.0.0.1:8000/put_price",json=f_dict)
