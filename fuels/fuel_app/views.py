@@ -8,12 +8,8 @@ from django.core.serializers import serialize
 def Get_Price(request):
      # Retrieve all records and order them by 'city_name'
     records = Fuel_price.objects.all().order_by('city_name')
-    serialized_data=serialize("json",records)
-    print(serialized_data)
-    # Convert JSON string to Python list/dictionary
-    data = json.loads(serialized_data)
-    print(data)
-    return HttpResponse(("thid is id"))
+    data = [{'city_name': record.city_name, 'petrol_price': record.petrol_price, 'diesel_price': record.diesel_price} for record in records]
+    return render(request,"index.html",{"data":data})
 
 @csrf_exempt
 def Put_Price(request):
@@ -22,7 +18,7 @@ def Put_Price(request):
     for data in form_data:
         city=data
         petrol_price=form_data[city][0]
-        diesel_price=form_data[city][0]
+        diesel_price=form_data[city][1]
         # Try to get the existing record based on the unique identifier (city)
         obj, created = Fuel_price.objects.get_or_create(city_name=city, defaults={
             'petrol_price': petrol_price,
