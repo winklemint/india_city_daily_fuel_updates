@@ -21,7 +21,7 @@ def Petrol_price():
             info=pattern.split(fuel_info_string)
             print("-------------")
             city, petrol_price, change = info[0], info[1], info[2]
-            print(city,"-",petrol_price,"-",change)  
+            # print(city,"-",petrol_price,"-",change)  
             petrol_price=petrol_price.split("₹")[0]
             city_price[city]= petrol_price 
     except Exception as e:
@@ -44,7 +44,7 @@ def Diesel_price():
             info=pattern.split(fuel_info_string)
             print("-------------")
             city, diesel_price, change = info[0], info[1], info[2]
-            print(city,"-",diesel_price,"-",change) 
+            # print(city,"-",diesel_price,"-",change) 
             diesel_price=diesel_price.split("₹")[0]
             city_price[city]= diesel_price
 
@@ -56,8 +56,11 @@ print("------petrol price----------")
 petrol_dict=Petrol_price()
 print("--------diesel price-----------")
 diesel_dict=Diesel_price()
-f_dict = {key: [petrol_dict.get(key, 0), diesel_dict.get(key, 0)] for key in set(petrol_dict) | set(diesel_dict)}
+# Convert values to integers and remove trailing spaces
+f_dict = {key: [float(petrol_dict.get(key, 0).strip()), float(diesel_dict.get(key, 0).strip())] for key in set(petrol_dict) | set(diesel_dict)}
 
-print(f_dict)
+# print(f_dict)
+# response =requests.put("http://127.0.0.1:8000/put_price",json=f_dict)
 
-response =requests.put("http://127.0.0.1:8000/put_price",json=f_dict)
+with open("price.json","a") as file:
+    json.dump(f_dict, file)
