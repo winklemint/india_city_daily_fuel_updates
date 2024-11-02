@@ -5,6 +5,8 @@ FROM python:3.11
 WORKDIR /app
 
 #COPY ./fuels /app
+# Copy the requirements file into the container
+COPY requirement.txt .
 
 # Install the necessary packages
 RUN pip install --no-cache-dir -r requirement.txt
@@ -13,7 +15,7 @@ RUN pip install --no-cache-dir -r requirement.txt
 COPY . .
 
 # Collect static files (if you have any)
-RUN python fuels/manage.py
+RUN python manage.py
 
 # Set environment variables
 ENV PYTHONUNBUFFERED 1
