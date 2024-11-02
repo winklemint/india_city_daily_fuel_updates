@@ -3,9 +3,9 @@ version: '3.8'
 services:
   web:
     build:
-      context: .
+      context: ./fuels
     volumes:
-      - ./:/app
+      - ./fuels:/app
     ports:
       - "8000:8000"
     environment:
