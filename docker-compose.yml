@@ -3,10 +3,11 @@ version: '3.8'
 services:
   web:
     build:
-      context: .
+      context: .  # This should point to the current directory where Dockerfile is
     volumes:
-      - ./fuels:/app
+      - .:/app  # This will map your current folder to the container
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
