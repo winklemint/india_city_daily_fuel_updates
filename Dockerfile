@@ -5,16 +5,13 @@ FROM python:3.11
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY requirement.txt .
+COPY requirement.txt .  
 
 # Install the necessary packages
 RUN pip install --no-cache-dir -r requirement.txt
 
 # Copy the entire Django project into the container
 COPY . .
-
-# Collect static files (if any)
-RUN python manage.py collectstatic --no-input
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
