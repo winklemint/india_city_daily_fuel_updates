@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build:
-      context: ./fuels
+      context: ./
     volumes:
       - ./fuels:/app
     ports:
